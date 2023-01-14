@@ -19,6 +19,8 @@
   "dependencies": {
     "@discordjs/voice": "^0.14.0",
     "discord.js": "^14.7.1",
-    "got": "^11.8.6"
+    "got": "^11.8.6",
+    "nodejs-file-downloader": "^4.10.6",
+    "sodium": "^3.0.2"
   }
 }
