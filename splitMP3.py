@@ -6,6 +6,15 @@ dir = 'mp3Split'
 for f in os.listdir(dir):
     os.remove(os.path.join(dir, f))
 
+dir = 'txtSplit'
+for f in os.listdir(dir):
+    os.remove(os.path.join(dir, f))
+
+dir = 'wavSplit'
+for f in os.listdir(dir):
+    os.remove(os.path.join(dir, f))
+
+
 sound = AudioSegment.from_mp3(sys.argv[1])
 length = int(sys.argv[2])*1000
 

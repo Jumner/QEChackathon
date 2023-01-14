@@ -14,7 +14,7 @@ module.exports = {
     async execute(interaction) { // On command run
         const attachment = interaction.options.getAttachment("mp3-file"); // get the attachment using the id
         const url = attachment.url; // Grab its url
-        playMp3File(interaction.member, url); // Play the url
+        await playMp3File(interaction, url); // Play the url
 
         await interaction.reply("Now Playing!"); // Tell the user that the bot is working
     },
