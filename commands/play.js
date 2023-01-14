@@ -11,14 +11,7 @@ module.exports = {
 
     async execute(interaction) {
         const attachment = interaction.options.getAttachment("mp3-file");
-        const name = attachment.url;
-
-        console.log(name);
-
-
-        function getChannelName(channel){
-            return channel.name;
-        }
+        const url = attachment.url;
 
         await interaction.reply("Pong!");
     },
