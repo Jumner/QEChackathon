@@ -1,6 +1,7 @@
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, VoiceConnectionStatus } = require('@discordjs/voice');
 const Downloader = require("nodejs-file-downloader");
 const path = require("node:path");
+const exec = require("await-exec");
 
 module.exports = {
   playMp3File(member, mp3Url) {
@@ -11,15 +12,6 @@ module.exports = {
       adapterCreator: member.guild.voiceAdapterCreator,
     });
 
-    connection.on(VoiceConnectionStatus.Ready, () => {
-      console.log("Ready");
-      const player = createAudioPlayer();
-      let resource = createAudioResource(path.join(__dirname, "mp3ToPlay", "audio.mp3"));
-      player.play(resource);
-      connection.subscribe(player);
-    });
-
-
     const Downloader = require("nodejs-file-downloader");
 
     (async () => {
@@ -28,7 +20,8 @@ module.exports = {
       const downloader = new Downloader({
         url: mp3Url, //If the file name already exists, a new file with the name 200MB1.zip is created.
         directory: "./mp3ToPlay", //This folder will be created, if it doesn't exist.
-        fileName: "audio.mp3"
+        fileName: "audio.mp3",
+        cloneFiles: "false"
       });
       try {
         const {filePath,downloadStatus} = await downloader.download(); //Downloader.download() resolves with some useful properties.
@@ -38,6 +31,23 @@ module.exports = {
         console.log("Download failed", error);
       }
     })();
+
+    connection.on(VoiceConnectionStatus.Ready, async () => {
+      console.log("Ready");
+      const player = createAudioPlayer();
+      const new_url = path.join(__dirname, "mp3ToPlay", "audio.mp3"); 
+
+      await exec("python transcribe.py " + new_url, (error, stdout, stderr) => {
+        console.log(stdout);
+      });
+
+      let resource = createAudioResource(new_url);
+      player.play(resource);
+      connection.subscribe(player);
+    });
+
+
+
   }
 
 }

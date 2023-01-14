@@ -1,0 +1,1 @@
+Hello, this is a test of our speech recognition program. For the Queens engineering competition.
