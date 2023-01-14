@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Jumner/QEChackathon#readme",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "@discordjs/voice": "^0.14.0",
+    "discord.js": "^14.7.1",
+    "got": "^11.8.6"
   }
 }

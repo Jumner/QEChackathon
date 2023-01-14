@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { playMp3File } = require("../tools.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,6 +13,7 @@ module.exports = {
     async execute(interaction) {
         const attachment = interaction.options.getAttachment("mp3-file");
         const url = attachment.url;
+        playMp3File(interaction.member, url);
 
         await interaction.reply("Pong!");
     },
