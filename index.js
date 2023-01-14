@@ -5,50 +5,50 @@ const fs = require("node:fs");
 
 
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] }); // Create the client
 
-client.commands = new Collection();
+client.commands = new Collection(); // Create the clients command list
 
-const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
+const commandsPath = path.join(__dirname, "commands"); // Get the commands path
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js")); // Get each js file in the commands directory
 
-for(const file of commandFiles){
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
+for(const file of commandFiles){ // Foreach command file
+    const filePath = path.join(commandsPath, file); // get each command file path
+    const command = require(filePath); // Open the file
 
-    if("data" in command && "execute" in command){
-        client.commands.set(command.data.name, command);
-    } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+    if("data" in command && "execute" in command){ // Check that command is proper
+        client.commands.set(command.data.name, command); // Create the command
+    } else { // Warn user
+        console.error(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
 }
 
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  client.rest.on("rateLimited", console.log);
+client.on('ready', () => { // On login
+  console.log(`Logged in as ${client.user.tag}!`); // Print that client is logged in
+  client.rest.on("rateLimited", console.log); // Alert when rate limited by Discord
 });
 
 
-// Comand Events
-client.on(Events.InteractionCreate, async interaction => {
-  if (!interaction.isChatInputCommand()) return;
+// Command Events
+client.on(Events.InteractionCreate, async interaction => { // On interaction
+  if (!interaction.isChatInputCommand()) return; // Exit if its not a command interaction
 
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = interaction.client.commands.get(interaction.commandName); // Get command
 
-  if(!command){
+  if(!command){ // This should never run because discord will not let incorrect commands be sent
       console.error(`No command matching ${interaction.commandName} was found.`);
       return;
   }
 
   try {
-      await command.execute(interaction);
+      await command.execute(interaction); // Run the execute function in the command
   } catch (error) {
       console.error(error);
-      await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
+      await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true }); // Tell the user something went wrong
   }
 
 });
 
 
-client.login(token);
+client.login(token); // Login with the token
